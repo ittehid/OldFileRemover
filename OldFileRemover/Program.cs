@@ -53,12 +53,12 @@ class Program
 
             // Считаем процент заполнения
             int usedPercent = (int)(((double)(totalBytes - freeBytes) / totalBytes) * 100);
-            logEntry += $"[INFO] Диск {config.DiskLetter}: используется на {usedPercent}%\n";
+            logEntry += $"[{DateTime.Now}] [INFO] Диск {config.DiskLetter}: используется на {usedPercent}%\n";
 
             // Если диск заполнен менее чем на указанный процент — завершить
             if (usedPercent < config.MaxDiskUsagePercent)
             {
-                logEntry += "[INFO] Порог не превышен. Очистка не требуется.\n";
+                logEntry += $"[{DateTime.Now}] [INFO] Порог не превышен. Очистка не требуется.\n";
                 Log(logEntry);
                 return;
             }
@@ -80,7 +80,7 @@ class Program
                     fi.Delete();                  // Удаляем файл
                     freedSpace += size;          // Учитываем освобождённое место
 
-                    logEntry += $"[INFO] Удалён файл: {file} | Размер: {size / (1024 * 1024)} МБ\n";
+                    logEntry += $"[{DateTime.Now}] [INFO] Удалён файл: {file} | Размер: {size / (1024 * 1024)} МБ\n";
 
                     // Проверка: достигнуто ли нужное свободное место
                     if (drive.AvailableFreeSpace + freedSpace >= targetFreeSpace)
@@ -89,13 +89,13 @@ class Program
                 catch (Exception ex)
                 {
                     // Логируем ошибку, если файл не удалось удалить
-                    logEntry += $"[ERROR] Ошибка удаления файла {file}: {ex.Message}\n";
+                    logEntry += $"[{DateTime.Now}] [ERROR] Ошибка удаления файла {file}: {ex.Message}\n";
                 }
             }
 
             long finalFree = drive.AvailableFreeSpace;
-            logEntry += $"[INFO] Освобождено всего: {freedSpace / (1024 * 1024)} МБ\n";
-            logEntry += $"[INFO] Свободное место после очистки: {finalFree / (1024 * 1024)} МБ\n";
+            logEntry += $"[{DateTime.Now}] [INFO] Освобождено всего: {freedSpace / (1024 * 1024)} МБ\n";
+            logEntry += $"[{DateTime.Now}] [INFO] Свободное место после очистки: {finalFree / (1024 * 1024)} МБ\n";
 
             // Записываем всё в лог
             Log(logEntry);
@@ -109,7 +109,7 @@ class Program
             }
             catch
             {
-                Console.WriteLine($" [ERROR] Ошибка при логировании: {ex.Message}");
+                Console.WriteLine($"[{DateTime.Now}] [ERROR] Ошибка при логировании: {ex.Message}");
             }
         }
     }
@@ -186,7 +186,7 @@ class Program
                 if (fi.CreationTime < DateTime.Now.AddDays(-daysToKeep))
                 {
                     fi.Delete();
-                    Console.WriteLine($"[INFO] Удалён старый лог: {fi.Name}");
+                    Console.WriteLine($"[{DateTime.Now}] [INFO] Удалён старый лог: {fi.Name}");
                 }
             }
         }
